@@ -1,32 +1,63 @@
 package ua.opnu;
 
 public class BankAccount {
+
+    private String owner;
     private double balance;
     private double transactionFee;
-    private String owner;
 
-    public BankAccount(String owner, double initialBalance) {
+    public BankAccount(String owner, double balance) {
         this.owner = owner;
-        this.balance = initialBalance;
+        this.balance = balance;
         this.transactionFee = 0.0;
     }
 
-    public double getBalance() { return balance; }
-    public void setBalance(double balance) { this.balance = balance; }
+    public BankAccount() {
+        this.owner = "";
+        this.balance = 0.0;
+        this.transactionFee = 0.0;
+    }
 
-    public double getTransactionFee() { return transactionFee; }
-    public void setTransactionFee(double transactionFee) { this.transactionFee = transactionFee; }
+    public String getOwner() {
+        return owner;
+    }
 
-    public String getOwner() { return owner; }
-    public void setOwner(String owner) { this.owner = owner; }
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public double getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(double transactionFee) {
+        this.transactionFee = transactionFee;
+    }
+
+    public void transfer(BankAccount other, int amount) {
+        if (this.balance >= amount) {
+            this.balance -= amount;
+            other.balance += amount;
+        } else {
+            System.out.println("Not enough money for transfer");
+        }
+    }
 
     public void deposit(double amount) {
-        if (amount > 0) balance += amount;
+        this.balance += amount;
     }
 
     public boolean withdraw(double amount) {
-        if (amount + transactionFee <= balance) {
-            balance -= (amount + transactionFee);
+        if (balance >= amount + transactionFee) {
+            balance -= amount + transactionFee;
             return true;
         }
         return false;
