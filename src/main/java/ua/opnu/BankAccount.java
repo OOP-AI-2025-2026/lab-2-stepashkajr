@@ -1,27 +1,35 @@
 package ua.opnu;
 
 public class BankAccount {
-    String name;
-    double balance;
-    double transactionFee;
+    private double balance;
+    private double transactionFee;
 
-    void deposit(double amount) {
-        // TODO: modify method body
-        balance = balance + amount;
+    public BankAccount(double balance, double transactionFee) {
+        this.balance = balance;
+        this.transactionFee = transactionFee;
     }
 
-    double getBalance() {
-        return this.balance;
+    public double getBalance() {
+        return balance;
     }
 
-    boolean withdraw(double amount) {
-        // TODO: modify method body
-        balance = balance - amount;
-        return true;
+    public double getTransactionFee() {
+        return transactionFee;
     }
 
-    boolean transfer(BankAccount receiver, double amount) {
-        // TODO: modify method body
-        return false;
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount - transactionFee;
+        } else {
+            System.out.println("Deposit amount must be positive");
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount + transactionFee <= balance) {
+            balance -= amount + transactionFee;
+        } else {
+            System.out.println("Insufficient funds or invalid amount");
+        }
     }
 }
