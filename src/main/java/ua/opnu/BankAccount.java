@@ -1,58 +1,52 @@
 package ua.opnu;
 
 public class BankAccount {
-    private String name;
     private double balance;
     private double transactionFee;
+    private String owner;
 
-    public BankAccount(String name, double balance) {
-        if (balance < 0) throw new IllegalArgumentException("Initial balance cannot be negative");
-        this.name = name;
-        this.balance = balance;
+    public BankAccount(String owner, double initialBalance) {
+        this.owner = owner;
+        this.balance = initialBalance;
         this.transactionFee = 0.0;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public double getBalance() {
         return balance;
     }
 
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     public double getTransactionFee() {
         return transactionFee;
     }
 
-    public void setTransactionFee(double fee) {
-        if (fee < 0) throw new IllegalArgumentException("Fee cannot be negative");
-        this.transactionFee = fee;
+    public void setTransactionFee(double transactionFee) {
+        this.transactionFee = transactionFee;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public void deposit(double amount) {
-        if (amount <= 0) return;
-        balance += amount;
-    }
-
-    public void withdraw(double amount) {
-        if (amount <= 0) return;
-        double totalDeduction = amount + transactionFee;
-        if (totalDeduction <= balance) {
-            balance -= totalDeduction;
+        if (amount > 0) {
+            balance += amount;
         }
     }
 
-    public void transfer(BankAccount receiver, double amount) {
-        if (receiver == null || amount <= 0) return;
-        double totalDeduction = amount + transactionFee;
-        if (totalDeduction <= balance) {
-            balance -= totalDeduction;
-            receiver.deposit(amount);
+    public boolean withdraw(double amount) {
+        if (amount + transactionFee <= balance) {
+            balance -= (amount + transactionFee);
+            return true;
         }
-    }
-
-    @Override
-    public String toString() {
-        return name + " : " + balance + " uah";
+        return false;
     }
 }
+
