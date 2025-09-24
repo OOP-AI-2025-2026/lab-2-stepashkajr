@@ -2,17 +2,23 @@ package ua.opnu;
 
 public class Main {
     public static void main(String[] args) {
-        BankAccount acc = new BankAccount("Serhii", 1000.0);
+        // Створюємо об'єкт BankAccount
+        BankAccount acc = new BankAccount(1000.0, 5.0);
 
-        System.out.println("Власник: " + acc.getOwner());
-        System.out.println("Баланс: " + acc.getBalance());
+        // Виводимо баланс і комісію
+        System.out.println("Balance: " + acc.getBalance());
+        System.out.println("Transaction Fee: " + acc.getTransactionFee());
 
-        acc.deposit(500.0);
-        System.out.println("Після депозиту 500: " + acc.getBalance());
+        // Приклад використання TimeSpan
+        TimeSpan ts1 = new TimeSpan(2, 30, 15); // 2 години, 30 хв, 15 сек
+        TimeSpan ts2 = new TimeSpan(1, 45, 50); // 1 година, 45 хв, 50 сек
 
-        acc.setTransactionFee(50.0);
-        boolean success = acc.withdraw(200.0);
-        System.out.println("Спроба зняти 200 з комісією 50: " + (success ? "успішно" : "не успішно"));
-        System.out.println("Баланс після зняття: " + acc.getBalance());
+        // Додаємо час
+        TimeSpan sum = ts1.add(ts2);
+        System.out.println("Sum of time spans: " + sum);
+
+        // Віднімаємо час
+        TimeSpan diff = ts1.subtract(ts2);
+        System.out.println("Difference of time spans: " + diff);
     }
 }
