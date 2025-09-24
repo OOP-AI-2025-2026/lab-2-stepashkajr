@@ -4,16 +4,10 @@ public class TimeSpan {
     private int hours;
     private int minutes;
 
-    public TimeSpan() {
-        this(0, 0);
-    }
-
     public TimeSpan(int hours, int minutes) {
-        if (hours < 0 || minutes < 0 || minutes > 59) {
-            throw new IllegalArgumentException("Invalid hours or minutes");
-        }
         this.hours = hours;
         this.minutes = minutes;
+        normalize();
     }
 
     public int getHours() {
@@ -24,56 +18,34 @@ public class TimeSpan {
         return minutes;
     }
 
-    public void add(int addHours, int addMinutes) {
-        if (addHours < 0 || addMinutes < 0) throw new IllegalArgumentException();
-        int total = getTotalMinutes() + addHours * 60 + addMinutes;
-        hours = total / 60;
-        minutes = total % 60;
+    public void add(TimeSpan other) {
+        this.hours += other.hours;
+        this.minutes += other.minutes;
+        normalize();
     }
 
-    public void addTimeSpan(TimeSpan span) {
-        if (span == null) throw new IllegalArgumentException();
-        add(span.getHours(), span.getMinutes());
+    public void subtract(TimeSpan other) {
+        this.hours -= other.hours;
+        this.minutes -= other.minutes;
+        normalize();
     }
 
-    public double getTotalHours() {
-        return hours + minutes / 60.0;
-    }
-
-    public int getTotalMinutes() {
-        return hours * 60 + minutes;
-    }
-
-    public void subtract(TimeSpan span) {
-        if (span == null) throw new IllegalArgumentException();
-        int diff = getTotalMinutes() - span.getTotalMinutes();
-        if (diff < 0) throw new IllegalArgumentException();
-        hours = diff / 60;
-        minutes = diff % 60;
-    }
-
-    public void scale(int factor) {
-        if (factor <= 0) throw new IllegalArgumentException();
-        int total = getTotalMinutes() * factor;
-        hours = total / 60;
-        minutes = total % 60;
+    private void normalize() {
+        if (minutes >= 60) {
+            hours += minutes / 60;
+            minutes %= 60;
+        }
+        if (minutes < 0) {
+            hours -= (Math.abs(minutes) + 59) / 60;
+            minutes = 60 - (Math.abs(minutes) % 60);
+            if (minutes == 60) minutes = 0;
+        }
+        if (hours < 0) hours = 0;
     }
 
     @Override
     public String toString() {
         return hours + "h " + minutes + "m";
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TimeSpan)) return false;
-        TimeSpan ts = (TimeSpan) o;
-        return this.hours == ts.hours && this.minutes == ts.minutes;
-    }
-
-    @Override
-    public int hashCode() {
-        return hours * 31 + minutes;
-    }
 }
+
