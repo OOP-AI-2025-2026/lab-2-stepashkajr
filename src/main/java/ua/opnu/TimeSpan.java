@@ -5,8 +5,7 @@ public class TimeSpan {
     private int minutes;
 
     public TimeSpan() {
-        this.hours = 0;
-        this.minutes = 0;
+        this(0, 0);
     }
 
     public TimeSpan(int hours, int minutes) {
@@ -35,9 +34,7 @@ public class TimeSpan {
     }
 
     public void addTimeSpan(TimeSpan span) {
-        if (span == null) {
-            throw new IllegalArgumentException("Span must not be null");
-        }
+        if (span == null) throw new IllegalArgumentException("Null timespan");
         add(span.getHours(), span.getMinutes());
     }
 
@@ -50,21 +47,15 @@ public class TimeSpan {
     }
 
     public void subtract(TimeSpan span) {
-        if (span == null) {
-            throw new IllegalArgumentException("Span must not be null");
-        }
+        if (span == null) throw new IllegalArgumentException("Null timespan");
         int diff = getTotalMinutes() - span.getTotalMinutes();
-        if (diff < 0) {
-            throw new IllegalArgumentException("Cannot subtract larger timespan");
-        }
+        if (diff < 0) throw new IllegalArgumentException("Cannot subtract larger timespan");
         hours = diff / 60;
         minutes = diff % 60;
     }
 
     public void scale(int factor) {
-        if (factor <= 0) {
-            throw new IllegalArgumentException("Factor must be > 0");
-        }
+        if (factor <= 0) throw new IllegalArgumentException("Factor must be > 0");
         int total = getTotalMinutes() * factor;
         hours = total / 60;
         minutes = total % 60;
@@ -72,15 +63,15 @@ public class TimeSpan {
 
     @Override
     public String toString() {
-        return String.format("%dh %dm", hours, minutes);
+        return hours + "h " + minutes + "m";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof TimeSpan)) return false;
-        TimeSpan that = (TimeSpan) o;
-        return this.hours == that.hours && this.minutes == that.minutes;
+        TimeSpan ts = (TimeSpan) o;
+        return this.hours == ts.hours && this.minutes == ts.minutes;
     }
 
     @Override
