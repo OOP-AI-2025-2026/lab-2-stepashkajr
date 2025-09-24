@@ -1,3 +1,5 @@
+package ua.opnu;
+
 public class BankAccount {
     private double balance;
     private double transactionFee;
@@ -9,34 +11,17 @@ public class BankAccount {
         this.transactionFee = 0.0;
     }
 
-    public double getBalance() {
-        return balance;
-    }
+    public double getBalance() { return balance; }
+    public void setBalance(double balance) { this.balance = balance; }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
+    public double getTransactionFee() { return transactionFee; }
+    public void setTransactionFee(double transactionFee) { this.transactionFee = transactionFee; }
 
-    public double getTransactionFee() {
-        return transactionFee;
-    }
-
-    public void setTransactionFee(double transactionFee) {
-        this.transactionFee = transactionFee;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
+    public String getOwner() { return owner; }
+    public void setOwner(String owner) { this.owner = owner; }
 
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-        }
+        if (amount > 0) balance += amount;
     }
 
     public boolean withdraw(double amount) {
