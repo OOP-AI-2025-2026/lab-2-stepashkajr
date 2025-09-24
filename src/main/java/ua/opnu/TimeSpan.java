@@ -25,16 +25,14 @@ public class TimeSpan {
     }
 
     public void add(int addHours, int addMinutes) {
-        if (addHours < 0 || addMinutes < 0 || addMinutes > 59) {
-            throw new IllegalArgumentException("Invalid arguments to add");
-        }
+        if (addHours < 0 || addMinutes < 0) throw new IllegalArgumentException();
         int total = getTotalMinutes() + addHours * 60 + addMinutes;
         hours = total / 60;
         minutes = total % 60;
     }
 
     public void addTimeSpan(TimeSpan span) {
-        if (span == null) throw new IllegalArgumentException("Null timespan");
+        if (span == null) throw new IllegalArgumentException();
         add(span.getHours(), span.getMinutes());
     }
 
@@ -47,15 +45,15 @@ public class TimeSpan {
     }
 
     public void subtract(TimeSpan span) {
-        if (span == null) throw new IllegalArgumentException("Null timespan");
+        if (span == null) throw new IllegalArgumentException();
         int diff = getTotalMinutes() - span.getTotalMinutes();
-        if (diff < 0) throw new IllegalArgumentException("Cannot subtract larger timespan");
+        if (diff < 0) throw new IllegalArgumentException();
         hours = diff / 60;
         minutes = diff % 60;
     }
 
     public void scale(int factor) {
-        if (factor <= 0) throw new IllegalArgumentException("Factor must be > 0");
+        if (factor <= 0) throw new IllegalArgumentException();
         int total = getTotalMinutes() * factor;
         hours = total / 60;
         minutes = total % 60;
@@ -79,5 +77,3 @@ public class TimeSpan {
         return hours * 31 + minutes;
     }
 }
-
-
