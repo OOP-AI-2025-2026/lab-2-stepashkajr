@@ -1,31 +1,20 @@
 package ua.opnu;
 
 public class BankAccount {
-
-    private String owner;
     private double balance;
     private double transactionFee;
 
-    public BankAccount(String owner, double balance) {
-        this.owner = owner;
+    public BankAccount(double balance, double transactionFee) {
         this.balance = balance;
-        this.transactionFee = 0.0;
+        this.transactionFee = transactionFee;
     }
 
-    public BankAccount() {
-        this.owner = "";
-        this.balance = 0.0;
-        this.transactionFee = 0.0;
+   
+    public BankAccount(double balance) {
+        this(balance, 0);
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
+   
     public double getBalance() {
         return balance;
     }
@@ -42,24 +31,19 @@ public class BankAccount {
         this.transactionFee = transactionFee;
     }
 
-    public void transfer(BankAccount other, int amount) {
-        if (this.balance >= amount) {
-            this.balance -= amount;
-            other.balance += amount;
-        } else {
-            System.out.println("Not enough money for transfer");
-        }
-    }
-
+    
     public void deposit(double amount) {
-        this.balance += amount;
+        balance += amount;
     }
 
+   
     public boolean withdraw(double amount) {
-        if (balance >= amount + transactionFee) {
-            balance -= amount + transactionFee;
+        double total = amount + transactionFee;
+        if (balance >= total) {
+            balance -= total;
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }
