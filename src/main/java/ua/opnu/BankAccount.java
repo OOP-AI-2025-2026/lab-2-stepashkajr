@@ -1,5 +1,3 @@
-package ua.opnu;
-
 public class BankAccount {
     private double balance;
     private double transactionFee;
@@ -49,4 +47,3 @@ public class BankAccount {
         return false;
     }
 }
-
