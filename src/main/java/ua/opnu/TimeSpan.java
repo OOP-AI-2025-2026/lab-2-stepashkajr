@@ -10,18 +10,11 @@ public class TimeSpan {
     }
 
     public TimeSpan(int hours, int minutes) {
-        setTime(hours, minutes);
-    }
-
-    private void setTime(int hours, int minutes) {
-        if (hours < 0 || minutes < 0) {
-            this.hours = 0;
-            this.minutes = 0;
-            return;
+        if (hours < 0 || minutes < 0 || minutes > 59) {
+            throw new IllegalArgumentException("Invalid hours or minutes");
         }
-        int totalMinutes = hours * 60 + minutes;
-        this.hours = totalMinutes / 60;
-        this.minutes = totalMinutes % 60;
+        this.hours = hours;
+        this.minutes = minutes;
     }
 
     public int getHours() {
@@ -33,13 +26,18 @@ public class TimeSpan {
     }
 
     public void add(int addHours, int addMinutes) {
-        if (addHours < 0 || addMinutes < 0) return; 
-        int totalMinutes = getTotalMinutes() + addHours * 60 + addMinutes;
-        setTime(totalMinutes / 60, totalMinutes % 60);
+        if (addHours < 0 || addMinutes < 0 || addMinutes > 59) {
+            throw new IllegalArgumentException("Invalid arguments to add");
+        }
+        int total = getTotalMinutes() + addHours * 60 + addMinutes;
+        hours = total / 60;
+        minutes = total % 60;
     }
 
     public void addTimeSpan(TimeSpan span) {
-        if (span == null) return;
+        if (span == null) {
+            throw new IllegalArgumentException("Span must not be null");
+        }
         add(span.getHours(), span.getMinutes());
     }
 
@@ -52,21 +50,43 @@ public class TimeSpan {
     }
 
     public void subtract(TimeSpan span) {
-        if (span == null) return;
+        if (span == null) {
+            throw new IllegalArgumentException("Span must not be null");
+        }
         int diff = getTotalMinutes() - span.getTotalMinutes();
-        if (diff < 0) return; 
-        setTime(diff / 60, diff % 60);
+        if (diff < 0) {
+            throw new IllegalArgumentException("Cannot subtract larger timespan");
+        }
+        hours = diff / 60;
+        minutes = diff % 60;
     }
 
     public void scale(int factor) {
-        if (factor <= 0) return; 
-        int totalMinutes = getTotalMinutes() * factor;
-        setTime(totalMinutes / 60, totalMinutes % 60);
+        if (factor <= 0) {
+            throw new IllegalArgumentException("Factor must be > 0");
+        }
+        int total = getTotalMinutes() * factor;
+        hours = total / 60;
+        minutes = total % 60;
     }
 
     @Override
     public String toString() {
-        return hours + "h " + minutes + "m";
+        return String.format("%dh %dm", hours, minutes);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeSpan)) return false;
+        TimeSpan that = (TimeSpan) o;
+        return this.hours == that.hours && this.minutes == that.minutes;
+    }
+
+    @Override
+    public int hashCode() {
+        return hours * 31 + minutes;
     }
 }
+
 
