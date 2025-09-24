@@ -5,11 +5,11 @@ public class TimeSpan {
     private int minutes;
 
     public TimeSpan(int hours, int minutes) {
-        if (hours < 0 || minutes < 0) {
-            throw new IllegalArgumentException("Hours and minutes must be non-negative");
+        if (hours < 0 || minutes < 0 || minutes > 59) {
+            throw new IllegalArgumentException("Invalid hours or minutes");
         }
-        this.hours = hours + minutes / 60;
-        this.minutes = minutes % 60;
+        this.hours = hours;
+        this.minutes = minutes;
     }
 
     public int getHours() {
@@ -20,14 +20,17 @@ public class TimeSpan {
         return minutes;
     }
 
-    public void add(int hours, int minutes) {
-        int totalMinutes = this.minutes + minutes;
-        this.hours += hours + totalMinutes / 60;
-        this.minutes = totalMinutes % 60;
+    public void add(int addHours, int addMinutes) {
+        if (addHours < 0 || addMinutes < 0 || addMinutes > 59) {
+            throw new IllegalArgumentException("Invalid hours or minutes to add");
+        }
+        int totalMinutes = getTotalMinutes() + addHours * 60 + addMinutes;
+        hours = totalMinutes / 60;
+        minutes = totalMinutes % 60;
     }
 
-    public void addTimeSpan(TimeSpan timespan) {
-        add(timespan.hours, timespan.minutes);
+    public void addTimeSpan(TimeSpan span) {
+        add(span.getHours(), span.getMinutes());
     }
 
     public double getTotalHours() {
@@ -39,27 +42,25 @@ public class TimeSpan {
     }
 
     public void subtract(TimeSpan span) {
-        int totalMinutes1 = getTotalMinutes();
-        int totalMinutes2 = span.getTotalMinutes();
-        int result = totalMinutes1 - totalMinutes2;
-        if (result < 0) {
-            throw new IllegalArgumentException("Resulting TimeSpan cannot be negative");
+        int diff = getTotalMinutes() - span.getTotalMinutes();
+        if (diff < 0) {
+            throw new IllegalArgumentException("Cannot subtract larger timespan");
         }
-        this.hours = result / 60;
-        this.minutes = result % 60;
+        hours = diff / 60;
+        minutes = diff % 60;
     }
 
     public void scale(int factor) {
-        if (factor < 0) {
-            throw new IllegalArgumentException("Scale factor must be non-negative");
+        if (factor <= 0) {
+            throw new IllegalArgumentException("Scale factor must be > 0");
         }
-        int total = getTotalMinutes() * factor;
-        this.hours = total / 60;
-        this.minutes = total % 60;
+        int totalMinutes = getTotalMinutes() * factor;
+        hours = totalMinutes / 60;
+        minutes = totalMinutes % 60;
     }
 
     @Override
     public String toString() {
-        return String.format("%d hours %d minutes", hours, minutes);
+        return hours + "h " + minutes + "m";
     }
 }
