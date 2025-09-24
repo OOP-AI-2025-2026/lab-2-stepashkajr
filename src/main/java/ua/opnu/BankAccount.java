@@ -9,41 +9,27 @@ public class BankAccount {
         this.transactionFee = transactionFee;
     }
 
-   
-    public BankAccount(double balance) {
-        this(balance, 0);
-    }
-
-   
     public double getBalance() {
         return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
     }
 
     public double getTransactionFee() {
         return transactionFee;
     }
 
-    public void setTransactionFee(double transactionFee) {
-        this.transactionFee = transactionFee;
-    }
-
-    
     public void deposit(double amount) {
-        balance += amount;
+        if (amount > 0) {
+            balance += amount - transactionFee;
+        } else {
+            System.out.println("Deposit amount must be positive");
+        }
     }
 
-   
-    public boolean withdraw(double amount) {
-        double total = amount + transactionFee;
-        if (balance >= total) {
-            balance -= total;
-            return true;
+    public void withdraw(double amount) {
+        if (amount > 0 && amount + transactionFee <= balance) {
+            balance -= amount + transactionFee;
         } else {
-            return false;
+            System.out.println("Insufficient funds or invalid amount");
         }
     }
 }
