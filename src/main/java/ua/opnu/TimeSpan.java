@@ -48,4 +48,3 @@ public class TimeSpan {
         return hours + "h " + minutes + "m";
     }
 }
-
