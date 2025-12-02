@@ -1,80 +1,72 @@
 package ua.opnu;
 
+
 public class TimeSpan {
 
     private int hours;
     private int minutes;
 
-    public TimeSpan(int hours, int minutes) {
-        this.hours = hours;
-        this.minutes = minutes;
-        normalize();
+    TimeSpan(int hours, int minutes) {
+        if (hours < 0  minutes < 0  minutes > 59) {
+            this.hours = 0;
+            this.minutes = 0;
+        } else {
+            this.hours = hours;
+            this.minutes = minutes;
+        }
     }
 
-    private void normalize() {
-        int total = hours * 60 + minutes;
-        if (total < 0) total = 0;
-
-        hours = total / 60;
-        minutes = total % 60;
+    int getHours() {
+        return this.hours;
     }
 
-    public int getHours() {
-        return hours;
+    int getMinutes() {
+        return this.minutes;
     }
 
-    public int getMinutes() {
-        return minutes;
+    void add(int hours, int minutes) {
+        if (hours < 0  minutes < 0  minutes > 59)
+            return;
+        int totalMinutes = this.getTotalMinutes() + hours * 60 + minutes;
+        this.hours = totalMinutes / 60;
+        this.minutes = totalMinutes % 60;
     }
 
-    // ==== REQUIRED BY TEST ====
-
-    public void add(TimeSpan other) {
-        this.hours += other.hours;
-        this.minutes += other.minutes;
-        normalize();
+    void addTimeSpan(TimeSpan timespan) {
+        int totalMinutes = this.getTotalMinutes() + timespan.getTotalMinutes();
+        this.hours = totalMinutes / 60;
+        this.minutes = totalMinutes % 60;
     }
 
-    public void add(int hours, int minutes) {
-        this.hours += hours;
-        this.minutes += minutes;
-        normalize();
+    double getTotalHours() {
+        return this.hours + this.minutes / 60.0;
     }
 
-    public void addTimeSpan(TimeSpan span) {
-        add(span);
+    int getTotalMinutes() {
+        return this.hours * 60 + this.minutes;
     }
 
-    public void subtract(TimeSpan other) {
-        this.hours -= other.hours;
-        this.minutes -= other.minutes;
-        normalize();
+    void subtract(TimeSpan span) {
+        int total1 = this.getTotalMinutes();
+        int total2 = span.getTotalMinutes();
+
+        if (total2 > total1) {
+            return;
+        }
+
+        int newTotal = total1 - total2;
+        this.hours = newTotal / 60;
+        this.minutes = newTotal % 60;
     }
 
-    public void subtract(int hours, int minutes) {
-        this.hours -= hours;
-        this.minutes -= minutes;
-        normalize();
-    }
+    void scale(int factor) {
+        if (factor <= 0) {
+            return;
+        }
 
-    public double getTotalHours() {
-        return hours + minutes / 60.0;
-    }
-
-    public int getTotalMinutes() {
-        return hours * 60 + minutes;
-    }
-
-    public void scale(int factor) {
         int total = getTotalMinutes() * factor;
-        hours = total / 60;
-        minutes = total % 60;
-        normalize();
-    }
-
-    @Override
-    public String toString() {
-        return hours + "h " + minutes + "m";
+        this.hours = total / 60;
+        this.minutes = total % 60;
     }
 }
 
