@@ -48,3 +48,4 @@ public class Student {
         // Тут немає ручного копіювання — використано стандартний метод
         return Arrays.copyOf(courses, courseCount);
     }
+}
