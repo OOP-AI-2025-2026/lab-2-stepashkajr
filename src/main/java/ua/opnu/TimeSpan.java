@@ -2,12 +2,11 @@ package ua.opnu;
 
 
 public class TimeSpan {
-
     private int hours;
     private int minutes;
 
     TimeSpan(int hours, int minutes) {
-        if (hours < 0  minutes < 0  minutes > 59) {
+        if (hours < 0 || minutes < 0 || minutes > 59) {
             this.hours = 0;
             this.minutes = 0;
         } else {
@@ -17,53 +16,51 @@ public class TimeSpan {
     }
 
     int getHours() {
-        return this.hours;
+        return hours;
     }
 
     int getMinutes() {
-        return this.minutes;
+        return minutes;
     }
 
     void add(int hours, int minutes) {
-        if (hours < 0  minutes < 0  minutes > 59)
-            return;
-        int totalMinutes = this.getTotalMinutes() + hours * 60 + minutes;
+        if (hours < 0 || minutes < 0 || minutes > 59) {
+            return; // ігноруємо неправильні аргументи
+        }
+        int totalMinutes = getTotalMinutes() + (hours * 60 + minutes);
         this.hours = totalMinutes / 60;
         this.minutes = totalMinutes % 60;
     }
 
     void addTimeSpan(TimeSpan timespan) {
-        int totalMinutes = this.getTotalMinutes() + timespan.getTotalMinutes();
-        this.hours = totalMinutes / 60;
-        this.minutes = totalMinutes % 60;
+        add(timespan.getHours(), timespan.getMinutes());
     }
 
     double getTotalHours() {
-        return this.hours + this.minutes / 60.0;
+        return hours + minutes / 60.0;
     }
 
     int getTotalMinutes() {
-        return this.hours * 60 + this.minutes;
+        return hours * 60 + minutes;
     }
 
     void subtract(TimeSpan span) {
-        int total1 = this.getTotalMinutes();
-        int total2 = span.getTotalMinutes();
+        int totalCurrent = getTotalMinutes();
+        int totalOther = span.getTotalMinutes();
 
-        if (total2 > total1) {
-            return;
+        if (totalOther > totalCurrent) {
+            return; // нічого не змінюємо
         }
 
-        int newTotal = total1 - total2;
-        this.hours = newTotal / 60;
-        this.minutes = newTotal % 60;
+        int result = totalCurrent - totalOther;
+        this.hours = result / 60;
+        this.minutes = result % 60;
     }
 
     void scale(int factor) {
         if (factor <= 0) {
-            return;
+            return; // ігноруємо
         }
-
         int total = getTotalMinutes() * factor;
         this.hours = total / 60;
         this.minutes = total % 60;
