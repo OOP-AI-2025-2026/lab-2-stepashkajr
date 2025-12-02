@@ -1,8 +1,15 @@
-ppackage ua.opnu;
+package ua.opnu;
 
 public class BankAccount {
-    private double balance;
-    private double transactionFee;
+
+    double balance;
+    double transactionFee;
+
+    // --- TESTS REQUIRE DEFAULT CONSTRUCTOR ---
+    public BankAccount() {
+        this.balance = 0;
+        this.transactionFee = 0;
+    }
 
     public BankAccount(double balance, double transactionFee) {
         this.balance = balance;
@@ -18,18 +25,18 @@ public class BankAccount {
     }
 
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount - transactionFee;
-        } else {
-            System.out.println("Deposit amount must be positive");
-        }
+        balance += amount - transactionFee;
     }
 
     public void withdraw(double amount) {
-        if (amount > 0 && amount + transactionFee <= balance) {
-            balance -= amount + transactionFee;
-        } else {
-            System.out.println("Insufficient funds or invalid amount");
+        balance -= amount + transactionFee;
+    }
+
+    // --- TESTS REQUIRE THIS METHOD ---
+    public void transfer(BankAccount other, int amount) {
+        if (this.balance >= amount + transactionFee) {
+            this.withdraw(amount);
+            other.deposit(amount);
         }
     }
 }
