@@ -1,4 +1,4 @@
-package ua.opnu;
+ppackage ua.opnu;
 
 public class BankAccount {
     private double balance;
