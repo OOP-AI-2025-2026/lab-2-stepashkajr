@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
 
         BankAccount acc = new BankAccount(1000.0, 5.0);
+
         System.out.println("Balance: " + acc.getBalance());
         System.out.println("Transaction Fee: " + acc.getTransactionFee());
 
