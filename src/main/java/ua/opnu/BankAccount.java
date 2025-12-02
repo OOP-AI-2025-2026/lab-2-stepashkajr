@@ -2,10 +2,10 @@ package ua.opnu;
 
 public class BankAccount {
 
-    public double balance;         // TEST EXPECTS PUBLIC
-    public double transactionFee;  // TEST EXPECTS PUBLIC
+    public double balance;
+    public double transactionFee;
 
-    // TEST REQUIRES DEFAULT CONSTRUCTOR
+    // DEFAULT CONSTRUCTOR (required by tests)
     public BankAccount() {
         this.balance = 0;
         this.transactionFee = 0;
@@ -16,32 +16,40 @@ public class BankAccount {
         this.transactionFee = transactionFee;
     }
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public double getTransactionFee() {
-        return transactionFee;
-    }
-
+    // deposit: INVALID if amount <= 0
     public boolean deposit(double amount) {
         if (amount <= 0) return false;
-        balance += amount - transactionFee;
+
+        balance += amount;
         return true;
     }
 
+    // withdraw: INVALID if amount <= 0 OR insufficient funds
     public boolean withdraw(double amount) {
-        if (amount + transactionFee > balance) return false;
-        balance -= (amount + transactionFee);
+        if (amount <= 0) return false;
+
+        double total = amount + transactionFee;
+
+        if (total > balance) return false;
+
+        balance -= total;
         return true;
     }
 
-    // TEST REQUIRES transfer(BankAccount, int)
-    public boolean transfer(BankAccount other, int amount) {
-        if (withdraw(amount)) {
-            other.deposit(amount);
-            return true;
-        }
-        return false;
+    // transfer: INVALID if amount <= 0 OR insufficient funds
+    public boolean transfer(BankAccount other, double amount) {
+        if (amount <= 0) return false;
+
+        double total = amount + transactionFee;
+
+        if (total > balance) return false;
+
+        // withdraw from first account
+        balance -= total;
+
+        // deposit to other WITHOUT applying other.transactionFee
+        other.balance += amount;
+
+        return true;
     }
 }
