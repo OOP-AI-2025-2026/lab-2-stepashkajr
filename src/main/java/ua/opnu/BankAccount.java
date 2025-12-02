@@ -2,10 +2,10 @@ package ua.opnu;
 
 public class BankAccount {
 
-    double balance;
-    double transactionFee;
+    public double balance;         // TEST EXPECTS PUBLIC
+    public double transactionFee;  // TEST EXPECTS PUBLIC
 
-    // --- TESTS REQUIRE DEFAULT CONSTRUCTOR ---
+    // TEST REQUIRES DEFAULT CONSTRUCTOR
     public BankAccount() {
         this.balance = 0;
         this.transactionFee = 0;
@@ -24,19 +24,24 @@ public class BankAccount {
         return transactionFee;
     }
 
-    public void deposit(double amount) {
+    public boolean deposit(double amount) {
+        if (amount <= 0) return false;
         balance += amount - transactionFee;
+        return true;
     }
 
-    public void withdraw(double amount) {
-        balance -= amount + transactionFee;
+    public boolean withdraw(double amount) {
+        if (amount + transactionFee > balance) return false;
+        balance -= (amount + transactionFee);
+        return true;
     }
 
-    // --- TESTS REQUIRE THIS METHOD ---
-    public void transfer(BankAccount other, int amount) {
-        if (this.balance >= amount + transactionFee) {
-            this.withdraw(amount);
+    // TEST REQUIRES transfer(BankAccount, int)
+    public boolean transfer(BankAccount other, int amount) {
+        if (withdraw(amount)) {
             other.deposit(amount);
+            return true;
         }
+        return false;
     }
 }
